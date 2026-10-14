@@ -20,7 +20,7 @@ export const PrayerTimingsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'daily' | 'ramadan' | 'monthly'>('daily');
   const [selectedDayOffset, setSelectedDayOffset] = useState<number>(0);
 
-  const prayerHallBg = '/src/assets/images/masjid_prayer_hall_1792001492556.jpg';
+  const prayerHallBg = '/images/masjid_prayer_hall.jpg';
 
   const prayers = [
     {

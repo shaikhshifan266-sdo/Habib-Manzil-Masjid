@@ -16,8 +16,8 @@ import {
 
 export const AboutPage: React.FC = () => {
   const { setCurrentPage } = useMasjid();
-  const prayerHallPhoto = '/src/assets/images/masjid_prayer_hall_1792001492556.jpg';
-  const heroMosquePhoto = '/src/assets/images/habib_manzil_hero_1792001493268.jpg';
+  const prayerHallPhoto = '/images/masjid_prayer_hall.jpg';
+  const heroMosquePhoto = '/images/habib_manzil_hero.jpg';
 
   const valuesList = [
     {

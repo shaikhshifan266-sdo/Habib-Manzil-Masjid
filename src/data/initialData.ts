@@ -167,7 +167,7 @@ export const INITIAL_EVENTS: MasjidEvent[] = [
     location: 'Main Prayer Hall, Habib Manzil Masjid',
     description:
       'Weekly religious talks, Quranic insights, and practical lessons to deepen understanding of faith, purify the heart, and navigate contemporary challenges with prophetic wisdom.',
-    imageUrl: '/src/assets/images/masjid_prayer_hall_1792001492556.jpg',
+    imageUrl: '/images/masjid_prayer_hall.jpg',
     instructorOrSpeaker: 'Imam & Khateeb, Habib Manzil Masjid',
     isUpcoming: true,
   },
@@ -179,7 +179,7 @@ export const INITIAL_EVENTS: MasjidEvent[] = [
     location: 'Madrasa Hall, 1st Floor',
     description:
       'Comprehensive foundation courses teaching Noorani Qaida, Quran recitation with Tajweed, essential Daily Duas, Seerah of the Prophet (ﷺ), and Islamic moral character (Akhlaq).',
-    imageUrl: '/src/assets/images/quran_islamic_class_1792001493660.jpg',
+    imageUrl: '/images/quran_islamic_class.jpg',
     instructorOrSpeaker: 'Qualified Asatizah (Teachers)',
     isUpcoming: true,
   },
@@ -191,7 +191,7 @@ export const INITIAL_EVENTS: MasjidEvent[] = [
     location: 'Habib Manzil Masjid Library / Conference Room',
     description:
       'Structured weekend classes focusing on Quranic Arabic vocabulary, basic grammar (Nahw & Sarf), and understanding the words recited in daily Salah.',
-    imageUrl: '/src/assets/images/quran_islamic_class_1792001493660.jpg',
+    imageUrl: '/images/quran_islamic_class.jpg',
     instructorOrSpeaker: 'Arabic Language Instructor',
     isUpcoming: true,
   },
@@ -203,7 +203,7 @@ export const INITIAL_EVENTS: MasjidEvent[] = [
     location: 'Main Prayer Hall',
     description:
       'Invited scholars and respected sheikhs address pressing spiritual and social topics, reinforcing unity, family guidance, and sincere worship.',
-    imageUrl: '/src/assets/images/habib_manzil_hero_1792001493268.jpg',
+    imageUrl: '/images/habib_manzil_hero.jpg',
     instructorOrSpeaker: 'Guest Scholars & Resident Khateeb',
     isUpcoming: true,
   },
@@ -215,7 +215,7 @@ export const INITIAL_EVENTS: MasjidEvent[] = [
     location: 'Dedicated Women’s Gallery (Segregated Entrance)',
     description:
       'Spiritual gatherings and educational lectures tailored for sisters in an appropriate, comfortable, and respectful environment, focusing on family, parenting, and personal spirituality.',
-    imageUrl: '/src/assets/images/masjid_prayer_hall_1792001492556.jpg',
+    imageUrl: '/images/masjid_prayer_hall.jpg',
     instructorOrSpeaker: 'Respected Alimat & Islamic Educators',
     isUpcoming: true,
   },
@@ -227,7 +227,7 @@ export const INITIAL_EVENTS: MasjidEvent[] = [
     location: 'Masjid Community Distribution Center',
     description:
       'Under the supervision of Fahad Education & Welfare Society, ration kits containing staples (rice, flour, pulses, cooking oil, dates, tea) are carefully assembled and delivered with dignity to deserving families across Navi Mumbai.',
-    imageUrl: '/src/assets/images/community_ration_drive_1792001493796.jpg',
+    imageUrl: '/images/community_ration_drive.jpg',
     instructorOrSpeaker: 'Welfare Committee & Volunteer Youth',
     isUpcoming: true,
   },
@@ -239,7 +239,7 @@ export const INITIAL_EVENTS: MasjidEvent[] = [
     location: 'Masjid Office Desk',
     description:
       'Facilitating timely calculation, collection, and direct disbursement of Fitrah food packages and support to eligible recipients prior to the Eid-ul-Fitr prayer, fulfilling prophetic instructions.',
-    imageUrl: '/src/assets/images/community_ration_drive_1792001493796.jpg',
+    imageUrl: '/images/community_ration_drive.jpg',
     instructorOrSpeaker: 'Zakat & Fitrah Sub-Committee',
     isUpcoming: true,
   },
@@ -251,7 +251,7 @@ export const INITIAL_EVENTS: MasjidEvent[] = [
     location: 'Habib Manzil Masjid Courtyard & Hall',
     description:
       'Inspiring children and young adults to master melodic, accurate Quranic recitation and the call to prayer, judged by certified Qaris with awards and certificates for all participants.',
-    imageUrl: '/src/assets/images/quran_islamic_class_1792001493660.jpg',
+    imageUrl: '/images/quran_islamic_class.jpg',
     instructorOrSpeaker: 'Board of Certified Qaris',
     isUpcoming: true,
   },
@@ -263,7 +263,7 @@ export const INITIAL_EVENTS: MasjidEvent[] = [
     location: 'Community Hall',
     description:
       'Interactive quiz competition covering Islamic history, Seerah of the Prophet Muhammad (ﷺ), Quranic knowledge, and Islamic civilization to nurture inquisitive learning among youngsters.',
-    imageUrl: '/src/assets/images/quran_islamic_class_1792001493660.jpg',
+    imageUrl: '/images/quran_islamic_class.jpg',
     instructorOrSpeaker: 'Youth Committee Organizers',
     isUpcoming: true,
   },
@@ -275,7 +275,7 @@ export const INITIAL_EVENTS: MasjidEvent[] = [
     location: 'Masjid Welfare Hall',
     description:
       'In collaboration with recognized Navi Mumbai blood banks and medical practitioners, voluntary donors gather to save lives in accordance with the Quranic teaching: "And whoever saves a life, it is as though he had saved the lives of all mankind" (5:32).',
-    imageUrl: '/src/assets/images/community_ration_drive_1792001493796.jpg',
+    imageUrl: '/images/community_ration_drive.jpg',
     instructorOrSpeaker: 'Medical Volunteer Team & Navi Mumbai Blood Bank',
     isUpcoming: true,
   },

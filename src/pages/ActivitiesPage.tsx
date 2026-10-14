@@ -27,7 +27,7 @@ export const ActivitiesPage: React.FC = () => {
   const [newDate, setNewDate] = useState('');
   const [newLocation, setNewLocation] = useState('Main Prayer Hall, Habib Manzil Masjid');
   const [newDescription, setNewDescription] = useState('');
-  const [newImageUrl, setNewImageUrl] = useState('/src/assets/images/masjid_prayer_hall_1792001492556.jpg');
+  const [newImageUrl, setNewImageUrl] = useState('/images/masjid_prayer_hall.jpg');
   const [newSpeaker, setNewSpeaker] = useState('');
 
   const categories: string[] = [

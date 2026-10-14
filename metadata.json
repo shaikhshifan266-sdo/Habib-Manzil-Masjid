@@ -2,5 +2,7 @@
   "name": "Habib Manzil Masjid",
   "description": "Official website for Habib Manzil Masjid, Nerul, Sector 20, Navi Mumbai. Prayer timings, Islamic reminders, community welfare, Nikah, and educational services.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }

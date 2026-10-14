@@ -27,8 +27,8 @@ export const HomePage: React.FC = () => {
   const [announcementCategory, setAnnouncementCategory] = useState<string>('All');
   const [searchFilter, setSearchFilter] = useState('');
 
-  const heroMosqueBg = '/src/assets/images/habib_manzil_hero_1792001493268.jpg';
-  const prayerHallBg = '/src/assets/images/masjid_prayer_hall_1792001492556.jpg';
+  const heroMosqueBg = '/images/habib_manzil_hero.jpg';
+  const prayerHallBg = '/images/masjid_prayer_hall.jpg';
 
   const quickAccessCards: {
     title: string;
