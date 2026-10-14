@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --color-emerald-deep: #145744;
+    --color-emerald-dark: #0e3b2e;
+    --color-sage: #A8BFA8;
+    --color-sage-light: #f0f5f0;
+    --color-ivory: #FAF8F0;
+    --color-sand: #E8DCC7;
+    --color-sand-light: #f5efe6;
+    --color-gold: #C6A15B;
+    --color-gold-hover: #b38e47;
+    --color-charcoal: #26332E;
+  }
+
+  body {
+    background-color: var(--color-ivory);
+    color: var(--color-charcoal);
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+
+  .font-arabic {
+    font-family: 'Amiri', 'Traditional Arabic', serif;
+    direction: rtl;
+  }
+}
+
+/* Subtle Islamic Geometric Patterns */
+.bg-islamic-pattern {
+  background-color: #FAF8F0;
+  background-image: radial-gradient(#145744 0.75px, transparent 0.75px), radial-gradient(#C6A15B 0.75px, #FAF8F0 0.75px);
+  background-size: 30px 30px;
+  background-position: 0 0, 15px 15px;
+  background-opacity: 0.05;
+}
+
+.bg-islamic-emerald-pattern {
+  background-color: #145744;
+  background-image: radial-gradient(rgba(198, 161, 91, 0.15) 1px, transparent 1px), radial-gradient(rgba(255, 255, 255, 0.08) 1px, #145744 1px);
+  background-size: 32px 32px;
+  background-position: 0 0, 16px 16px;
+}
+
+/* Arch Shape Utilities */
+.mosque-arch-top {
+  border-top-left-radius: 50% 30%;
+  border-top-right-radius: 50% 30%;
+}
+
+.print-only {
+  display: none;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+  }
+}
