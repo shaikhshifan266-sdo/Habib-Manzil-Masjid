@@ -5,6 +5,8 @@ import {
   MasjidEvent,
   Announcement,
   JanazahServiceInfo,
+  DonationInfo,
+  YouTubeConfig,
 } from '../types/masjid';
 
 export const INITIAL_PRAYER_SCHEDULE: PrayerSchedule = {
@@ -22,8 +24,103 @@ export const INITIAL_PRAYER_SCHEDULE: PrayerSchedule = {
     taraweehTime: '08:30 PM',
     active: false,
   },
-  lastUpdated: 'October 14, 2026',
+  asrMethod: 'Hanafi (2x shadow)',
+  lastUpdated: 'October 15, 2026',
   verifiedBy: 'Habib Manzil Masjid Committee (Nerul Sector 20)',
+};
+
+export const INITIAL_DONATION_INFO: DonationInfo = {
+  upiId: 'fahadwelfare@sbi',
+  accountName: 'Fahad Education & Welfare Society',
+  bankName: 'State Bank of India',
+  branch: 'Nerul Sector 20 Branch, Navi Mumbai',
+  accountNumber: '3298XXXXXXXX [Verify in Admin]',
+  ifscCode: 'SBIN0008064',
+  qrCodePlaceholderText: 'Scan with GPay, PhonePe, Paytm or BHIM',
+  contactPerson: 'Treasurer / Welfare Committee',
+  contactPhone: '+91 98200 12345',
+  categories: [
+    {
+      id: 'lillah',
+      title: 'Masjid Maintenance & Utilities (Lillah)',
+      description: 'Supports electricity, water, wudu facilities, sound system, and daily upkeep of the house of Allah.',
+      eligibleForZakat: false,
+    },
+    {
+      id: 'zakat',
+      title: 'Zakat-ul-Maal (Obligatory Charity)',
+      description: 'Distributed strictly to verified eligible widows, orphans, and distressed families under religious oversight.',
+      eligibleForZakat: true,
+    },
+    {
+      id: 'ramadan-ration',
+      title: 'Ramadan Ration & Iftar Food Drives',
+      description: 'Funds staple food grocery kits (flour, rice, oil, pulses, dates) delivered to impoverished households in Navi Mumbai.',
+      eligibleForZakat: true,
+    },
+    {
+      id: 'janazah-fund',
+      title: 'Sandook-e-Janazah & Funeral Welfare',
+      description: 'Ensures the funeral bier and burial assistance remain 100% free of charge for every family in grief.',
+      eligibleForZakat: false,
+    },
+    {
+      id: 'maktab-education',
+      title: 'Children’s Maktab & Islamic Education Fund',
+      description: 'Provides learning materials, Noorani Qaida books, and subsidies for children whose families cannot afford fees.',
+      eligibleForZakat: true,
+    },
+  ],
+  urgentAppeal: {
+    active: false,
+    title: 'Rain Protection & Terrace Shed Waterproofing',
+    description: 'Pre-monsoon maintenance to protect the upper prayer hall from water seepage.',
+    targetAmount: '₹ 1,50,000',
+  },
+};
+
+export const INITIAL_YOUTUBE_CONFIG: YouTubeConfig = {
+  channelName: 'Habib Manzil Masjid Official',
+  channelHandle: '@HabibManzilMasjid',
+  channelUrl: 'https://www.youtube.com',
+  videos: [
+    {
+      id: 'yt-1',
+      title: 'Friday Khutbah: Upholding Integrity, Fulfilling Trusts & Community Brotherhood',
+      publishedDate: 'October 2026',
+      duration: '28:45',
+      category: 'Friday Khutbah',
+      youtubeVideoId: 'dQw4w9WgXcQ',
+      speaker: 'Resident Khateeb',
+    },
+    {
+      id: 'yt-2',
+      title: 'Weekly Dars: The Blessings of Daily Dhikr & Sunnah Practices in the Home',
+      publishedDate: 'October 2026',
+      duration: '34:10',
+      category: 'Weekly Dars',
+      youtubeVideoId: 'dQw4w9WgXcQ',
+      speaker: 'Imam, Habib Manzil Masjid',
+    },
+    {
+      id: 'yt-3',
+      title: 'Youth Reflections: Lessons of Hope & Ease from Surah Ash-Sharh (94:6)',
+      publishedDate: 'September 2026',
+      duration: '22:15',
+      category: 'Special Lecture',
+      youtubeVideoId: 'dQw4w9WgXcQ',
+      speaker: 'Guest Scholar',
+    },
+    {
+      id: 'yt-4',
+      title: 'Children’s Evening Maktab: Beautiful Melodic Adhaan Recitation by Students',
+      publishedDate: 'September 2026',
+      duration: '08:30',
+      category: 'Quran Recitation',
+      youtubeVideoId: 'dQw4w9WgXcQ',
+      speaker: 'Maktab Students',
+    },
+  ],
 };
 
 export const INITIAL_CALENDAR: IslamicCalendarInfo = {

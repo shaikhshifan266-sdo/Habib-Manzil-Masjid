@@ -84,6 +84,14 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <button
+                  onClick={() => handleNav('donate')}
+                  className="hover:text-white transition-colors cursor-pointer text-[#C6A15B] font-semibold"
+                >
+                  Donate &amp; Support (Zakat / Lillah)
+                </button>
+              </li>
+              <li>
+                <button
                   onClick={() => handleNav('contact')}
                   className="hover:text-white transition-colors cursor-pointer"
                 >

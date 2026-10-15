@@ -16,8 +16,13 @@ import {
   Save,
   Phone,
   FileText,
+  Download,
+  Video,
+  CreditCard,
+  ExternalLink,
+  Sparkles,
 } from 'lucide-react';
-import { Announcement } from '../types/masjid';
+import { Announcement, YouTubeVideoItem } from '../types/masjid';
 
 export const AdminDashboard: React.FC = () => {
   const {
@@ -35,6 +40,11 @@ export const AdminDashboard: React.FC = () => {
     deleteAnnouncement,
     janazahInfo,
     updateJanazahInfo,
+    donationInfo,
+    updateDonationInfo,
+    youtubeConfig,
+    updateYouTubeConfig,
+    exportAllData,
     nikahInquiries,
     volunteerApplications,
     programmeRequests,
@@ -45,8 +55,13 @@ export const AdminDashboard: React.FC = () => {
   const [pinInput, setPinInput] = useState('');
   const [pinError, setPinError] = useState(false);
   const [activeTab, setActiveTab] = useState<
-    'timings' | 'calendar' | 'janazah' | 'announcements' | 'inquiries' | 'feedback'
+    'timings' | 'calendar' | 'janazah' | 'announcements' | 'donations' | 'youtube' | 'inquiries' | 'feedback'
   >('timings');
+
+  // Form states for prayer timings
+  const [asrMethod, setAsrMethod] = useState<'Hanafi (2x shadow)' | 'Shafi’i / Standard (1x shadow)'>(
+    prayerSchedule.asrMethod || 'Hanafi (2x shadow)'
+  );
 
   // Form states for prayer timings
   const [fajrAzan, setFajrAzan] = useState(prayerSchedule.fajr.azan);
@@ -79,6 +94,27 @@ export const AdminDashboard: React.FC = () => {
   const [newAnnDate, setNewAnnDate] = useState('October 2026');
   const [newAnnContent, setNewAnnContent] = useState('');
 
+  // Donation form states
+  const [donationUpi, setDonationUpi] = useState(donationInfo.upiId);
+  const [donationAccountName, setDonationAccountName] = useState(donationInfo.accountName);
+  const [donationBankName, setDonationBankName] = useState(donationInfo.bankName);
+  const [donationAccountNumber, setDonationAccountNumber] = useState(donationInfo.accountNumber);
+  const [donationIfsc, setDonationIfsc] = useState(donationInfo.ifscCode);
+  const [donationBranch, setDonationBranch] = useState(donationInfo.branch);
+  const [donationPhone, setDonationPhone] = useState(donationInfo.contactPhone);
+  const [urgentActive, setUrgentActive] = useState(donationInfo.urgentAppeal?.active || false);
+  const [urgentTitle, setUrgentTitle] = useState(donationInfo.urgentAppeal?.title || '');
+  const [urgentDesc, setUrgentDesc] = useState(donationInfo.urgentAppeal?.description || '');
+  const [urgentTarget, setUrgentTarget] = useState(donationInfo.urgentAppeal?.targetAmount || '');
+
+  // YouTube states
+  const [channelUrl, setChannelUrl] = useState(youtubeConfig.channelUrl);
+  const [newYtTitle, setNewYtTitle] = useState('');
+  const [newYtId, setNewYtId] = useState('');
+  const [newYtCategory, setNewYtCategory] = useState<YouTubeVideoItem['category']>('Friday Khutbah');
+  const [newYtDuration, setNewYtDuration] = useState('25:00');
+  const [newYtSpeaker, setNewYtSpeaker] = useState('');
+
   if (!isAdminModalOpen) return null;
 
   const handleLogin = (e: React.FormEvent) => {
@@ -95,6 +131,7 @@ export const AdminDashboard: React.FC = () => {
   const handleSaveTimings = (e: React.FormEvent) => {
     e.preventDefault();
     updatePrayerSchedule({
+      asrMethod,
       fajr: { azan: fajrAzan, jamaah: fajrJamaah },
       sunrise: { time: sunriseTime },
       dhuhr: { azan: dhuhrAzan, jamaah: dhuhrJamaah },
@@ -111,6 +148,64 @@ export const AdminDashboard: React.FC = () => {
       },
     });
 
+    setSaveSuccess(true);
+    setTimeout(() => setSaveSuccess(false), 2000);
+  };
+
+  const handleSaveDonations = (e: React.FormEvent) => {
+    e.preventDefault();
+    updateDonationInfo({
+      upiId: donationUpi,
+      accountName: donationAccountName,
+      bankName: donationBankName,
+      accountNumber: donationAccountNumber,
+      ifscCode: donationIfsc,
+      branch: donationBranch,
+      contactPhone: donationPhone,
+      urgentAppeal: {
+        active: urgentActive,
+        title: urgentTitle,
+        description: urgentDesc,
+        targetAmount: urgentTarget,
+      },
+    });
+    setSaveSuccess(true);
+    setTimeout(() => setSaveSuccess(false), 2000);
+  };
+
+  const handleSaveYouTubeChannel = (e: React.FormEvent) => {
+    e.preventDefault();
+    updateYouTubeConfig({ channelUrl });
+    setSaveSuccess(true);
+    setTimeout(() => setSaveSuccess(false), 2000);
+  };
+
+  const handleAddYouTubeVideo = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newYtTitle.trim() || !newYtId.trim()) return;
+    const newVideo: YouTubeVideoItem = {
+      id: `yt-${Date.now()}`,
+      title: newYtTitle,
+      publishedDate: 'Recently Added',
+      duration: newYtDuration || '25:00',
+      category: newYtCategory,
+      youtubeVideoId: newYtId.trim(),
+      speaker: newYtSpeaker || undefined,
+    };
+    updateYouTubeConfig({
+      videos: [newVideo, ...youtubeConfig.videos],
+    });
+    setNewYtTitle('');
+    setNewYtId('');
+    setNewYtSpeaker('');
+    setSaveSuccess(true);
+    setTimeout(() => setSaveSuccess(false), 2000);
+  };
+
+  const handleDeleteYouTubeVideo = (id: string) => {
+    updateYouTubeConfig({
+      videos: youtubeConfig.videos.filter((v) => v.id !== id),
+    });
     setSaveSuccess(true);
     setTimeout(() => setSaveSuccess(false), 2000);
   };
@@ -268,6 +363,30 @@ export const AdminDashboard: React.FC = () => {
               </button>
 
               <button
+                onClick={() => setActiveTab('donations')}
+                className={`px-4 py-2.5 text-xs font-semibold rounded-t-lg transition-colors cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
+                  activeTab === 'donations'
+                    ? 'bg-white text-[#145744] border-t-2 border-[#145744]'
+                    : 'text-[#64746B] hover:text-[#145744]'
+                }`}
+              >
+                <CreditCard className="w-3.5 h-3.5" />
+                <span>Donations &amp; UPI</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab('youtube')}
+                className={`px-4 py-2.5 text-xs font-semibold rounded-t-lg transition-colors cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
+                  activeTab === 'youtube'
+                    ? 'bg-white text-[#145744] border-t-2 border-[#145744]'
+                    : 'text-[#64746B] hover:text-[#145744]'
+                }`}
+              >
+                <Video className="w-3.5 h-3.5" />
+                <span>YouTube Media ({youtubeConfig.videos.length})</span>
+              </button>
+
+              <button
                 onClick={() => setActiveTab('inquiries')}
                 className={`px-4 py-2.5 text-xs font-semibold rounded-t-lg transition-colors cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
                   activeTab === 'inquiries'
@@ -320,6 +439,24 @@ export const AdminDashboard: React.FC = () => {
                       <Save className="w-3.5 h-3.5" />
                       <span>Save &amp; Update Live</span>
                     </button>
+                  </div>
+
+                  {/* Juristic Asr Calculation Method Selector */}
+                  <div className="p-3.5 bg-[#FAF8F0] rounded-xl border border-[#E8DCC7] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                      <span className="text-xs font-bold text-[#145744] block">Asr Juristic Calculation Method</span>
+                      <span className="text-[11px] text-[#64746B]">
+                        Applies to Asr Azan calculation and prints on daily &amp; monthly timetable sheets
+                      </span>
+                    </div>
+                    <select
+                      value={asrMethod}
+                      onChange={(e) => setAsrMethod(e.target.value as any)}
+                      className="px-3 py-1.5 bg-white border border-[#E8DCC7] rounded-lg text-xs font-semibold text-[#145744] cursor-pointer"
+                    >
+                      <option value="Hanafi (2x shadow)">Hanafi (2x shadow - Standard Indian Subcontinent)</option>
+                      <option value="Shafi’i / Standard (1x shadow)">Shafi’i / Standard (1x shadow)</option>
+                    </select>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -668,6 +805,298 @@ export const AdminDashboard: React.FC = () => {
                 </div>
               )}
 
+              {/* TAB: DONATIONS & UPI SETTINGS */}
+              {activeTab === 'donations' && (
+                <form onSubmit={handleSaveDonations} className="space-y-6 text-xs">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#E8DCC7]">
+                    <div>
+                      <h4 className="font-bold text-[#145744] text-sm">
+                        Donation Accounts &amp; UPI Configuration
+                      </h4>
+                      <p className="text-[#64746B] text-[11px]">
+                        Configure official society accounts, UPI ID, and urgent appeal campaigns.
+                      </p>
+                    </div>
+                    <button
+                      type="submit"
+                      className="px-4 py-2 rounded-lg text-xs font-bold text-white bg-[#145744] hover:bg-[#0e3b2e] flex items-center gap-1.5 cursor-pointer shadow-xs"
+                    >
+                      <Save className="w-3.5 h-3.5" />
+                      <span>Save Donation Info</span>
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#64746B] mb-1">
+                        Official UPI ID (VPA)
+                      </label>
+                      <input
+                        type="text"
+                        value={donationUpi}
+                        onChange={(e) => setDonationUpi(e.target.value)}
+                        className="w-full px-3 py-2 bg-white border border-[#E8DCC7] rounded-lg font-mono text-xs font-bold text-[#145744]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#64746B] mb-1">
+                        Beneficiary / Account Name
+                      </label>
+                      <input
+                        type="text"
+                        value={donationAccountName}
+                        onChange={(e) => setDonationAccountName(e.target.value)}
+                        className="w-full px-3 py-2 bg-white border border-[#E8DCC7] rounded-lg text-xs"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#64746B] mb-1">
+                        Bank Name
+                      </label>
+                      <input
+                        type="text"
+                        value={donationBankName}
+                        onChange={(e) => setDonationBankName(e.target.value)}
+                        className="w-full px-3 py-2 bg-white border border-[#E8DCC7] rounded-lg text-xs"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#64746B] mb-1">
+                        Account Number
+                      </label>
+                      <input
+                        type="text"
+                        value={donationAccountNumber}
+                        onChange={(e) => setDonationAccountNumber(e.target.value)}
+                        className="w-full px-3 py-2 bg-white border border-[#E8DCC7] rounded-lg font-mono text-xs"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#64746B] mb-1">
+                        IFSC Code
+                      </label>
+                      <input
+                        type="text"
+                        value={donationIfsc}
+                        onChange={(e) => setDonationIfsc(e.target.value)}
+                        className="w-full px-3 py-2 bg-white border border-[#E8DCC7] rounded-lg font-mono text-xs uppercase"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#64746B] mb-1">
+                        Branch Location
+                      </label>
+                      <input
+                        type="text"
+                        value={donationBranch}
+                        onChange={(e) => setDonationBranch(e.target.value)}
+                        className="w-full px-3 py-2 bg-white border border-[#E8DCC7] rounded-lg text-xs"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#64746B] mb-1">
+                        Treasurer / Committee WhatsApp Helpline
+                      </label>
+                      <input
+                        type="text"
+                        value={donationPhone}
+                        onChange={(e) => setDonationPhone(e.target.value)}
+                        className="w-full px-3 py-2 bg-white border border-[#E8DCC7] rounded-lg font-mono text-xs"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Urgent Appeal Sub-form */}
+                  <div className="p-4 bg-[#FAF8F0] rounded-xl border border-[#E8DCC7] space-y-3">
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="checkbox"
+                        id="urgentToggle"
+                        checked={urgentActive}
+                        onChange={(e) => setUrgentActive(e.target.checked)}
+                        className="w-4 h-4 text-[#145744] rounded"
+                      />
+                      <label htmlFor="urgentToggle" className="font-bold text-[#26332E]">
+                        Display Urgent Appeal Notice on Donation Page
+                      </label>
+                    </div>
+
+                    {urgentActive && (
+                      <div className="space-y-3 pt-2">
+                        <div>
+                          <label className="block text-[11px] text-[#64746B] mb-1">
+                            Appeal Title
+                          </label>
+                          <input
+                            type="text"
+                            value={urgentTitle}
+                            onChange={(e) => setUrgentTitle(e.target.value)}
+                            placeholder="e.g. Rain Protection & Terrace Shed Waterproofing"
+                            className="w-full px-3 py-2 bg-white border border-[#E8DCC7] rounded-lg text-xs"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] text-[#64746B] mb-1">
+                            Target Amount (Optional)
+                          </label>
+                          <input
+                            type="text"
+                            value={urgentTarget}
+                            onChange={(e) => setUrgentTarget(e.target.value)}
+                            placeholder="e.g. ₹ 1,50,000"
+                            className="w-full px-3 py-2 bg-white border border-[#E8DCC7] rounded-lg text-xs"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] text-[#64746B] mb-1">
+                            Appeal Description
+                          </label>
+                          <textarea
+                            rows={2}
+                            value={urgentDesc}
+                            onChange={(e) => setUrgentDesc(e.target.value)}
+                            className="w-full px-3 py-2 bg-white border border-[#E8DCC7] rounded-lg text-xs"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </form>
+              )}
+
+              {/* TAB: YOUTUBE MEDIA HUB */}
+              {activeTab === 'youtube' && (
+                <div className="space-y-6 text-xs">
+                  {/* Channel URL Config */}
+                  <form onSubmit={handleSaveYouTubeChannel} className="p-4 bg-[#FAF8F0] rounded-xl border border-[#E8DCC7] flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+                    <div className="flex-1">
+                      <label className="block font-bold text-[#145744] text-xs mb-1">
+                        Official YouTube Channel URL
+                      </label>
+                      <input
+                        type="url"
+                        value={channelUrl}
+                        onChange={(e) => setChannelUrl(e.target.value)}
+                        placeholder="https://www.youtube.com/@HabibManzilMasjid"
+                        className="w-full px-3 py-2 bg-white border border-[#E8DCC7] rounded-lg text-xs"
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      className="px-4 py-2 rounded-lg font-bold text-white bg-[#145744] hover:bg-[#0e3b2e] cursor-pointer whitespace-nowrap"
+                    >
+                      Update Channel Link
+                    </button>
+                  </form>
+
+                  {/* Add New Video */}
+                  <form onSubmit={handleAddYouTubeVideo} className="p-4 bg-white rounded-xl border border-[#E8DCC7] space-y-3">
+                    <h5 className="font-bold text-[#145744] text-xs flex items-center gap-1.5">
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>Publish New Video / Bayan</span>
+                    </h5>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[11px] text-[#64746B] mb-1">Title</label>
+                        <input
+                          type="text"
+                          required
+                          value={newYtTitle}
+                          onChange={(e) => setNewYtTitle(e.target.value)}
+                          placeholder="e.g. Friday Khutbah on Sincerity"
+                          className="w-full px-3 py-1.5 bg-[#FAF8F0] border border-[#E8DCC7] rounded text-xs"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] text-[#64746B] mb-1">
+                          YouTube Video ID (or 11-char code)
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={newYtId}
+                          onChange={(e) => setNewYtId(e.target.value)}
+                          placeholder="e.g. dQw4w9WgXcQ"
+                          className="w-full px-3 py-1.5 bg-[#FAF8F0] border border-[#E8DCC7] rounded font-mono text-xs"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] text-[#64746B] mb-1">Category</label>
+                        <select
+                          value={newYtCategory}
+                          onChange={(e) => setNewYtCategory(e.target.value as any)}
+                          className="w-full px-3 py-1.5 bg-[#FAF8F0] border border-[#E8DCC7] rounded text-xs"
+                        >
+                          <option value="Friday Khutbah">Friday Khutbah</option>
+                          <option value="Weekly Dars">Weekly Dars</option>
+                          <option value="Quran Recitation">Quran Recitation</option>
+                          <option value="Special Lecture">Special Lecture</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-[11px] text-[#64746B] mb-1">Speaker / Khateeb</label>
+                        <input
+                          type="text"
+                          value={newYtSpeaker}
+                          onChange={(e) => setNewYtSpeaker(e.target.value)}
+                          placeholder="e.g. Resident Imam"
+                          className="w-full px-3 py-1.5 bg-[#FAF8F0] border border-[#E8DCC7] rounded text-xs"
+                        />
+                      </div>
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="px-4 py-2 rounded-lg font-bold text-white bg-[#145744] hover:bg-[#0e3b2e] cursor-pointer"
+                    >
+                      Add Video Card
+                    </button>
+                  </form>
+
+                  {/* Existing Videos List */}
+                  <div>
+                    <h5 className="font-bold text-[#26332E] text-xs mb-3">
+                      Current Videos Published on Homepage ({youtubeConfig.videos.length})
+                    </h5>
+                    <div className="space-y-2">
+                      {youtubeConfig.videos.map((vid) => (
+                        <div
+                          key={vid.id}
+                          className="p-3 bg-white rounded-xl border border-[#E8DCC7] flex items-center justify-between gap-4"
+                        >
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 text-[10px] text-[#64746B]">
+                              <span className="font-semibold text-[#145744]">{vid.category}</span>
+                              <span>·</span>
+                              <span>{vid.duration}</span>
+                            </div>
+                            <h6 className="font-bold text-sm text-[#26332E] mt-0.5">{vid.title}</h6>
+                            <div className="text-[11px] text-[#64746B]">
+                              Speaker: {vid.speaker || 'Habib Manzil Media'} | YouTube ID: <span className="font-mono">{vid.youtubeVideoId}</span>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteYouTubeVideo(vid.id)}
+                            className="p-1.5 text-rose-600 hover:bg-rose-50 rounded cursor-pointer"
+                            title="Remove video card"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* TAB: INQUIRIES */}
               {activeTab === 'inquiries' && (
                 <div className="space-y-6 text-xs">
@@ -770,7 +1199,18 @@ export const AdminDashboard: React.FC = () => {
 
             {/* Dashboard Footer */}
             <div className="bg-[#FAF8F0] px-6 py-3 border-t border-[#E8DCC7] flex items-center justify-between text-xs">
-              <span className="text-[#64746B]">Authorized Session Active</span>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={exportAllData}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-[#E8DCC7] text-[#145744] hover:bg-[#FAF8F0] font-semibold cursor-pointer shadow-xs transition-colors"
+                  title="Download complete JSON backup of prayer times, announcements, submissions, and settings"
+                >
+                  <Download className="w-3.5 h-3.5 text-[#C6A15B]" />
+                  <span>Export Backup (JSON)</span>
+                </button>
+                <span className="text-[#64746B] hidden sm:inline">Authorized Session Active</span>
+              </div>
               <button
                 onClick={logoutAdmin}
                 className="text-rose-700 hover:underline font-semibold cursor-pointer"

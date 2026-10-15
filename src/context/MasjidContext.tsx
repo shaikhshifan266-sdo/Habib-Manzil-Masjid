@@ -12,6 +12,8 @@ import {
   ProgrammeRequest,
   GeneralContactMessage,
   FeedbackSubmission,
+  DonationInfo,
+  YouTubeConfig,
 } from '../types/masjid';
 import {
   INITIAL_PRAYER_SCHEDULE,
@@ -20,6 +22,8 @@ import {
   INITIAL_ANNOUNCEMENTS,
   INITIAL_EVENTS,
   INITIAL_JANAZAH_INFO,
+  INITIAL_DONATION_INFO,
+  INITIAL_YOUTUBE_CONFIG,
 } from '../data/initialData';
 import { getLiveIslamicCalendarInfo } from '../utils/islamicDate';
 
@@ -53,12 +57,21 @@ interface MasjidContextType {
   feedbackList: FeedbackSubmission[];
   submitFeedback: (feedback: Omit<FeedbackSubmission, 'id' | 'submittedAt'>) => Promise<boolean>;
 
+  // Donation & Welfare
+  donationInfo: DonationInfo;
+  updateDonationInfo: (info: Partial<DonationInfo>) => void;
+
+  // YouTube Media Hub
+  youtubeConfig: YouTubeConfig;
+  updateYouTubeConfig: (config: Partial<YouTubeConfig>) => void;
+
   // Admin Modal & State
   isAdminModalOpen: boolean;
   setIsAdminModalOpen: (open: boolean) => void;
   isAdminAuthenticated: boolean;
   loginAdmin: (pin: string) => boolean;
   logoutAdmin: () => void;
+  exportAllData: () => void;
 
   // Search filter
   searchQuery: string;
@@ -101,6 +114,16 @@ export const MasjidProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [janazahInfo, setJanazahInfo] = useState<JanazahServiceInfo>(() => {
     const saved = localStorage.getItem('hmm_janazah_info');
     return saved ? JSON.parse(saved) : INITIAL_JANAZAH_INFO;
+  });
+
+  const [donationInfo, setDonationInfo] = useState<DonationInfo>(() => {
+    const saved = localStorage.getItem('hmm_donation_info');
+    return saved ? JSON.parse(saved) : INITIAL_DONATION_INFO;
+  });
+
+  const [youtubeConfig, setYouTubeConfig] = useState<YouTubeConfig>(() => {
+    const saved = localStorage.getItem('hmm_youtube_config');
+    return saved ? JSON.parse(saved) : INITIAL_YOUTUBE_CONFIG;
   });
 
   const [hadiths] = useState<HadithOfTheDay[]>(CURATED_HADITHS);
@@ -178,6 +201,14 @@ export const MasjidProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   useEffect(() => {
     localStorage.setItem('hmm_feedback', JSON.stringify(feedbackList));
   }, [feedbackList]);
+
+  useEffect(() => {
+    localStorage.setItem('hmm_donation_info', JSON.stringify(donationInfo));
+  }, [donationInfo]);
+
+  useEffect(() => {
+    localStorage.setItem('hmm_youtube_config', JSON.stringify(youtubeConfig));
+  }, [youtubeConfig]);
 
   const setCurrentPage = (page: PageView) => {
     setCurrentPageState(page);
@@ -336,6 +367,42 @@ export const MasjidProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     sessionStorage.removeItem('hmm_admin_auth');
   };
 
+  const updateDonationInfo = (info: Partial<DonationInfo>) => {
+    setDonationInfo((prev) => ({ ...prev, ...info }));
+  };
+
+  const updateYouTubeConfig = (config: Partial<YouTubeConfig>) => {
+    setYouTubeConfig((prev) => ({ ...prev, ...config }));
+  };
+
+  const exportAllData = () => {
+    const exportPayload = {
+      exportedAt: new Date().toISOString(),
+      masjid: 'Habib Manzil Masjid, Nerul Sector 20, Navi Mumbai',
+      prayerSchedule,
+      calendarOffset: hijriOffset,
+      announcements,
+      events,
+      janazahInfo,
+      donationInfo,
+      youtubeConfig,
+      submissions: {
+        nikahInquiries,
+        volunteerApplications,
+        programmeRequests,
+        contactMessages,
+        feedbackList,
+      },
+    };
+    const blob = new Blob([JSON.stringify(exportPayload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `habib_manzil_masjid_backup_${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <MasjidContext.Provider
       value={{
@@ -355,6 +422,10 @@ export const MasjidProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         addEvent,
         janazahInfo,
         updateJanazahInfo,
+        donationInfo,
+        updateDonationInfo,
+        youtubeConfig,
+        updateYouTubeConfig,
         nikahInquiries,
         submitNikahInquiry,
         volunteerApplications,
@@ -370,6 +441,7 @@ export const MasjidProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         isAdminAuthenticated,
         loginAdmin,
         logoutAdmin,
+        exportAllData,
         searchQuery,
         setSearchQuery,
       }}

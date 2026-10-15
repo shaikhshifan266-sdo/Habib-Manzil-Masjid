@@ -8,7 +8,9 @@ import { ActivitiesPage } from './pages/ActivitiesPage';
 import { ServicesPage } from './pages/ServicesPage';
 import { PrayerTimingsPage } from './pages/PrayerTimingsPage';
 import { ContactPage } from './pages/ContactPage';
+import { DonatePage } from './pages/DonatePage';
 import { AdminDashboard } from './components/AdminDashboard';
+import { FloatingDonateButton } from './components/FloatingDonateButton';
 
 const MainContent: React.FC = () => {
   const { currentPage } = useMasjid();
@@ -24,9 +26,11 @@ const MainContent: React.FC = () => {
         {currentPage === 'services' && <ServicesPage />}
         {currentPage === 'prayer-timings' && <PrayerTimingsPage />}
         {currentPage === 'contact' && <ContactPage />}
+        {currentPage === 'donate' && <DonatePage />}
       </main>
 
       <Footer />
+      <FloatingDonateButton />
       <AdminDashboard />
     </div>
   );

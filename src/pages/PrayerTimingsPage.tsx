@@ -53,7 +53,7 @@ export const PrayerTimingsPage: React.FC = () => {
       icon: Sun,
       azan: prayerSchedule.asr.azan,
       jamaah: prayerSchedule.asr.jamaah,
-      note: 'Hanafi calculation method',
+      note: prayerSchedule.asrMethod ? `${prayerSchedule.asrMethod} calculation` : 'Hanafi (2x shadow) calculation',
     },
     {
       name: 'Maghrib',

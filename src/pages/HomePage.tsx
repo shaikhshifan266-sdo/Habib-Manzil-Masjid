@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useMasjid } from '../context/MasjidContext';
 import { PrayerWidget } from '../components/PrayerWidget';
 import { IslamicCalendarWidget } from '../components/IslamicCalendarWidget';
+import { MasjidYouTubeSection } from '../components/MasjidYouTubeSection';
 import { Announcement, PageView } from '../types/masjid';
 import {
   Clock,
@@ -76,16 +77,16 @@ export const HomePage: React.FC = () => {
       page: 'services',
     },
     {
-      title: 'Get Directions',
-      description: 'Behind SBI Bank, Nerul, Sector 20, Navi Mumbai.',
-      icon: Navigation,
-      actionText: 'Find Location',
-      page: 'contact',
+      title: 'Donate & Welfare',
+      description: 'Zakat, Lillah, and Janazah welfare fund via instant UPI QR or Bank.',
+      icon: HeartHandshake,
+      actionText: 'Contribute Now',
+      page: 'donate',
     },
     {
-      title: 'Contact the Masjid',
-      description: 'Enquiries, feedback, and committee communication.',
-      icon: Mail,
+      title: 'Contact & Directions',
+      description: 'Behind SBI Bank, Nerul Sector 20. Enquiries, feedback, and committee.',
+      icon: MapPin,
       actionText: 'Get in Touch',
       page: 'contact',
     },
@@ -397,7 +398,10 @@ export const HomePage: React.FC = () => {
           </div>
         </section>
 
-        {/* 7. Latest Announcements Section */}
+        {/* 7. Official YouTube Media Hub & Islamic Reminders */}
+        <MasjidYouTubeSection />
+
+        {/* 8. Latest Announcements Section */}
         <section aria-label="Latest Announcements">
           <div className="bg-white rounded-2xl border border-[#E8DCC7] p-6 sm:p-8 shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-[#E8DCC7]">

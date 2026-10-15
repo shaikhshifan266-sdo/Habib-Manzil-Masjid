@@ -14,6 +14,7 @@ export const Navbar: React.FC = () => {
     { label: 'Activities & Events', page: 'activities' },
     { label: 'Our Services', page: 'services' },
     { label: 'Prayer Timings', page: 'prayer-timings' },
+    { label: 'Donate', page: 'donate' },
     { label: 'Contact Us', page: 'contact' },
   ];
 

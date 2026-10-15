@@ -1,4 +1,11 @@
-export type PageView = 'home' | 'about' | 'activities' | 'services' | 'prayer-timings' | 'contact';
+export type PageView =
+  | 'home'
+  | 'about'
+  | 'activities'
+  | 'services'
+  | 'prayer-timings'
+  | 'contact'
+  | 'donate';
 
 export interface PrayerTimeItem {
   name: string;
@@ -24,8 +31,52 @@ export interface PrayerSchedule {
     taraweehTime: string;
     active: boolean;
   };
+  asrMethod: 'Hanafi (2x shadow)' | 'Shafi’i / Standard (1x shadow)';
   lastUpdated: string;
   verifiedBy: string;
+}
+
+export interface DonationFundCategory {
+  id: string;
+  title: string;
+  description: string;
+  eligibleForZakat: boolean;
+}
+
+export interface DonationInfo {
+  upiId: string;
+  accountName: string;
+  bankName: string;
+  accountNumber: string;
+  ifscCode: string;
+  branch: string;
+  qrCodePlaceholderText: string;
+  contactPerson: string;
+  contactPhone: string;
+  categories: DonationFundCategory[];
+  urgentAppeal?: {
+    active: boolean;
+    title: string;
+    description: string;
+    targetAmount?: string;
+  };
+}
+
+export interface YouTubeVideoItem {
+  id: string;
+  title: string;
+  publishedDate: string;
+  duration: string;
+  category: 'Friday Khutbah' | 'Weekly Dars' | 'Quran Recitation' | 'Special Lecture';
+  youtubeVideoId: string; // e.g. for embed or link
+  speaker?: string;
+}
+
+export interface YouTubeConfig {
+  channelName: string;
+  channelHandle: string;
+  channelUrl: string;
+  videos: YouTubeVideoItem[];
 }
 
 export interface IslamicCalendarInfo {
