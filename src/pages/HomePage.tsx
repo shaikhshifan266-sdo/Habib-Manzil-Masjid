@@ -19,13 +19,23 @@ import {
   MapPin,
   Sparkles,
   Search,
+  RefreshCw,
 } from 'lucide-react';
+import { getRandomQuranVerse, QURAN_VERSES } from '../data/quranVerses';
 
 export const HomePage: React.FC = () => {
   const { setCurrentPage, announcements, events, janazahInfo } = useMasjid();
   const [selectedAnnouncement, setSelectedAnnouncement] = useState<Announcement | null>(null);
   const [announcementCategory, setAnnouncementCategory] = useState<string>('All');
   const [searchFilter, setSearchFilter] = useState('');
+  const [currentVerse, setCurrentVerse] = useState(() => getRandomQuranVerse());
+
+  const cycleNextVerse = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const currentIndex = QURAN_VERSES.findIndex((v) => v.id === currentVerse.id);
+    const nextIndex = (currentIndex + 1) % QURAN_VERSES.length;
+    setCurrentVerse(QURAN_VERSES[nextIndex]);
+  };
 
   const heroMosqueBg = '/images/habib_manzil_hero.jpg';
   const prayerHallBg = '/images/masjid_prayer_hall.jpg';
@@ -132,16 +142,41 @@ export const HomePage: React.FC = () => {
             A place to strengthen our connection with Allah, seek authentic knowledge, and serve our community in Nerul, Navi Mumbai.
           </p>
 
-          {/* Revered Quranic Verse Callout */}
-          <div className="max-w-xl mx-auto bg-black/25 backdrop-blur-md rounded-2xl p-6 border border-[#C6A15B]/30 mb-10 shadow-lg">
-            <div className="font-arabic text-2xl sm:text-3xl text-[#C6A15B] leading-loose mb-2 text-center" dir="rtl">
-              إِنَّ مَعَ الْعُسْرِ يُسْرًا
+          {/* Revered Quranic Verse Callout (Changes on every reload & supports interactive next) */}
+          <div className="max-w-2xl mx-auto bg-black/30 backdrop-blur-md rounded-2xl p-6 sm:p-7 border border-[#C6A15B]/35 mb-10 shadow-xl relative group">
+            <div className="flex items-center justify-between gap-2 mb-3 pb-2 border-b border-white/10 text-xs">
+              <span className="text-[#C6A15B] font-medium tracking-wide uppercase text-[11px] flex items-center gap-1.5">
+                <span>✦</span>
+                <span>Ayah of the Quran</span>
+                {currentVerse.theme && (
+                  <span className="text-[#A8BFA8] font-normal normal-case hidden sm:inline">
+                    · {currentVerse.theme}
+                  </span>
+                )}
+              </span>
+              <button
+                type="button"
+                onClick={cycleNextVerse}
+                className="text-[#E8DCC7] hover:text-white flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-md bg-white/10 hover:bg-white/15 transition-colors cursor-pointer"
+                title="Read another verse from the Holy Quran"
+              >
+                <RefreshCw className="w-3 h-3 text-[#C6A15B]" />
+                <span className="hidden sm:inline">Next Verse</span>
+              </button>
             </div>
-            <p className="text-sm sm:text-base text-white italic font-serif">
-              "Indeed, with hardship comes ease."
+
+            <div className="font-arabic text-2xl sm:text-3xl text-[#C6A15B] leading-loose mb-3 text-center transition-all duration-300" dir="rtl">
+              {currentVerse.arabicText}
+            </div>
+
+            <p className="text-sm sm:text-base text-white italic font-serif max-w-xl mx-auto leading-relaxed">
+              "{currentVerse.translation}"
             </p>
-            <div className="text-xs text-[#A8BFA8] mt-1 font-sans">
-              — Surah Ash-Sharh (94:6)
+
+            <div className="text-xs text-[#A8BFA8] mt-3 font-sans flex items-center justify-center gap-2">
+              <span className="font-medium text-[#E8DCC7]">
+                — {currentVerse.surahName} ({currentVerse.surahNumber}:{currentVerse.ayahNumber})
+              </span>
             </div>
           </div>
 

@@ -21,6 +21,7 @@ import {
   INITIAL_EVENTS,
   INITIAL_JANAZAH_INFO,
 } from '../data/initialData';
+import { getLiveIslamicCalendarInfo } from '../utils/islamicDate';
 
 interface MasjidContextType {
   currentPage: PageView;
@@ -76,9 +77,15 @@ export const MasjidProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     return saved ? JSON.parse(saved) : INITIAL_PRAYER_SCHEDULE;
   });
 
+  const [hijriOffset, setHijriOffset] = useState<number>(() => {
+    const saved = localStorage.getItem('hmm_hijri_offset');
+    return saved ? parseInt(saved, 10) : 0;
+  });
+
   const [calendarInfo, setCalendarInfo] = useState<IslamicCalendarInfo>(() => {
-    const saved = localStorage.getItem('hmm_calendar_info');
-    return saved ? JSON.parse(saved) : INITIAL_CALENDAR;
+    const savedOffset = localStorage.getItem('hmm_hijri_offset');
+    const offset = savedOffset ? parseInt(savedOffset, 10) : 0;
+    return getLiveIslamicCalendarInfo(offset);
   });
 
   const [announcements, setAnnouncements] = useState<Announcement[]>(() => {
@@ -192,12 +199,20 @@ export const MasjidProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   };
 
   const updateHijriOffset = (offset: number) => {
-    setCalendarInfo((prev) => ({
-      ...prev,
-      hijriOffsetDays: offset,
-      hijriDay: Math.max(1, Math.min(30, INITIAL_CALENDAR.hijriDay + offset)),
-    }));
+    setHijriOffset(offset);
+    localStorage.setItem('hmm_hijri_offset', offset.toString());
+    setCalendarInfo(getLiveIslamicCalendarInfo(offset));
   };
+
+  // Keep live Hijri & Gregorian date in sync in real time
+  useEffect(() => {
+    const refreshDate = () => {
+      setCalendarInfo(getLiveIslamicCalendarInfo(hijriOffset));
+    };
+    refreshDate();
+    const interval = setInterval(refreshDate, 60000); // check every minute
+    return () => clearInterval(interval);
+  }, [hijriOffset]);
 
   const nextHadith = () => {
     setHadithIndex((prev) => (prev + 1) % hadiths.length);
